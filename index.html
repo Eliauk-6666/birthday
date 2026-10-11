@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>杨欣羽，生日快乐</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><rect x='4' y='10' width='16' height='11' rx='1' fill='%23ecc875'/><rect x='3' y='7' width='18' height='4' rx='1' fill='%23f7dd9b'/><rect x='11' y='7' width='2' height='14' fill='%23ff7fb2'/><path d='M12 7c-2-3-5-2-4 0 1 1 4 1 4 1zm0 0c2-3 5-2 4 0-1 1-4 1-4 1z' fill='%23ff7fb2'/></svg>">
+<link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Noto+Serif+SC:wght@400;600;700;900&family=Noto+Sans+SC:wght@300;400;500;700&display=swap">
+<style>
+:root{
+  --night:#060a22; --night2:#0b1136; --deep:#16205a;
+  --star:#eef0ff; --mut:#aeb6dd;
+  --gold:#ecc875; --gold-bright:#f7dd9b;
+  --pink:#ff7fb2; --pink-soft:#ffb3d0;
+  --paper:#f8f1df; --ink:#4a4033;
+  --serif:'Noto Serif SC','Songti SC','SimSun',serif;
+  --sans:'PingFang SC','Noto Sans SC','Microsoft YaHei',sans-serif;
+  --hand:'Kaiti SC','STKaiti','KaiTi','Noto Serif SC',serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%}
+body{font-family:var(--sans);color:var(--star);background:var(--night);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+img{display:block}
+.view{display:none}
+.view.active{display:block}
+
+/* ===== 静音开关 ===== */
+#mute-btn{position:fixed;top:14px;right:14px;z-index:80;width:42px;height:42px;border-radius:50%;
+  border:1px solid rgba(255,255,255,.22);display:flex;align-items:center;justify-content:center;
+  background:rgba(10,15,40,.55);backdrop-filter:blur(4px)}
+#mute-btn svg{width:19px;height:19px;fill:#eef0ff}
+#mute-btn.muted svg{fill:#8b93bd}
+
+/* ===== 开场页 ===== */
+#view-intro{position:relative;min-height:100vh;overflow:hidden;
+  background:radial-gradient(120% 90% at 50% 0%,var(--deep) 0%,var(--night2) 45%,var(--night) 100%)}
+#view-intro.active{display:flex;align-items:center;justify-content:center}
+.starfield{position:absolute;inset:0;pointer-events:none;background-repeat:repeat}
+.s1{background-image:radial-gradient(1px 1px at 20px 30px,#fff,transparent),radial-gradient(1px 1px at 90px 130px,#dbe4ff,transparent),radial-gradient(1.6px 1.6px at 170px 70px,#fff,transparent),radial-gradient(1px 1px at 240px 210px,#cfd8ff,transparent);background-size:300px 300px;animation:tw 4s ease-in-out infinite}
+.s2{background-image:radial-gradient(1px 1px at 50px 90px,#fff,transparent),radial-gradient(1.4px 1.4px at 150px 40px,#e6ecff,transparent),radial-gradient(1px 1px at 280px 160px,#fff,transparent);background-size:420px 420px;animation:tw 5.5s ease-in-out infinite .8s}
+.s3{background-image:radial-gradient(1.8px 1.8px at 100px 120px,#fff,transparent),radial-gradient(1.2px 1.2px at 320px 60px,#dfe6ff,transparent),radial-gradient(1px 1px at 220px 280px,#fff,transparent);background-size:560px 560px;animation:tw 6.5s ease-in-out infinite 1.4s}
+@keyframes tw{0%,100%{opacity:.5}50%{opacity:1}}
+#meteor-layer{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+.meteor{position:absolute;width:170px;height:2px;border-radius:2px;
+  background:linear-gradient(90deg,rgba(255,255,255,0) 0%,rgba(220,230,255,.5) 70%,#fff 100%);
+  filter:drop-shadow(0 0 6px rgba(255,255,255,.8));animation:shoot .9s linear forwards}
+@keyframes shoot{0%{opacity:0;transform:rotate(28deg) translate(0,0)}8%{opacity:1}100%{opacity:0;transform:rotate(28deg) translate(-760px,430px)}}
+.intro-inner{position:relative;z-index:2;padding:30px 26px;text-align:center}
+.intro-pre{font-size:11px;letter-spacing:.38em;color:#aeb8e8;margin-bottom:24px}
+.intro-title{font-family:var(--serif);font-weight:700;font-size:clamp(40px,11.5vw,66px);line-height:1.28;
+  text-shadow:0 0 32px rgba(180,200,255,.4)}
+.intro-sub{margin-top:20px;font-size:15px;color:#c6cdf0;letter-spacing:.18em}
+.glow-btn{margin:42px auto 0;display:block;padding:16px 48px;border-radius:42px;font-size:17px;letter-spacing:.22em;
+  color:#28305f;background:linear-gradient(180deg,#fdebb4,#eec873);font-weight:500;
+  box-shadow:0 0 24px rgba(240,210,140,.55),inset 0 1px 0 rgba(255,255,255,.8);animation:pulse 2.6s ease-in-out infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 18px rgba(240,210,140,.4)}50%{box-shadow:0 0 40px rgba(240,210,140,.85)}}
+
+/* ===== 主页 礼物塔 ===== */
+#view-home{position:relative;padding:58px 22px 64px;max-width:520px;margin:0 auto}
+#view-home .home-bg{position:fixed;left:0;top:0;width:100vw;height:100vh;object-fit:cover;object-position:center 30%;z-index:0}
+#view-home .home-veil{position:fixed;inset:0;z-index:1;
+  background:radial-gradient(125% 100% at 50% 26%,rgba(6,10,34,.5) 0%,rgba(6,10,34,.72) 55%,rgba(6,10,34,.92) 100%)}
+#view-home .home-head,#view-home .tower,#view-home .counter,#view-home .final-btn{position:relative;z-index:2}
+.home-head h2{font-family:var(--serif);font-size:26px;text-align:center;font-weight:700;letter-spacing:.04em}
+.home-head p{text-align:center;color:var(--mut);font-size:14px;margin-top:12px;letter-spacing:.1em}
+.tower{margin:40px 0 28px;display:flex;flex-direction:column;gap:15px}
+.trow{display:flex;justify-content:center;gap:14px}
+.r1 .gift{width:clamp(100px,29vw,132px)}
+.r3 .gift{width:clamp(86px,25vw,118px)}
+.r4 .gift{width:clamp(74px,22vw,104px)}
+.gift{position:relative;aspect-ratio:1/1;cursor:pointer;transition:transform .18s,filter .3s}
+.gift:active{transform:scale(.93)}
+.gift svg{width:100%;height:100%;display:block;filter:drop-shadow(0 9px 15px rgba(0,0,0,.45))}
+.gift .lid{transform-origin:center bottom;transition:transform .5s cubic-bezier(.22,1,.36,1)}
+.gift.opening .lid{transform:translateY(-16px) rotate(-9deg)}
+.gift.opened{filter:grayscale(.55) brightness(.68)}
+.gift.opened:active{transform:none}
+.counter{text-align:center;font-size:15px;letter-spacing:.18em;color:var(--gold-bright);margin-top:6px}
+.final-btn{display:block;margin:34px auto 0;padding:15px 42px;border-radius:32px;
+  background:linear-gradient(180deg,#ffd4e4,#ff95bd);color:#5a1738;font-size:16px;letter-spacing:.2em;font-weight:500;
+  box-shadow:0 12px 26px rgba(255,127,178,.38)}
+.final-btn[hidden]{display:none}
+
+/* ===== 通用弹层 ===== */
+#overlay{position:fixed;inset:0;z-index:50;display:none;align-items:center;justify-content:center;padding:24px;
+  background:rgba(5,8,24,.74);backdrop-filter:blur(3px)}
+#overlay.show{display:flex}
+.modal-card{position:relative;width:100%;max-width:420px;max-height:86vh;overflow-y:auto;border-radius:20px;
+  padding:32px 26px;background:linear-gradient(180deg,#1b2554,#121a3f);
+  border:1px solid rgba(236,200,117,.28);box-shadow:0 26px 64px rgba(0,0,0,.55)}
+.close-x{position:absolute;top:12px;right:12px;width:34px;height:34px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,.26);color:#dfe4ff;z-index:5}
+.close-x svg{width:15px;height:15px;stroke:#dfe4ff}
+.m-title{font-family:var(--serif);font-size:22px;text-align:center;font-weight:700;letter-spacing:.04em}
+.m-sub{text-align:center;font-size:13px;color:var(--mut);margin-top:9px;letter-spacing:.06em}
+
+/* ===== 照片占位 ===== */
+.photo-slot{position:relative;width:100%;border-radius:14px;overflow:hidden;margin:18px 0;
+  background:rgba(255,255,255,.05);min-height:180px}
+.photo-slot img{width:100%;height:100%;object-fit:cover}
+.photo-slot img.missing{opacity:0}
+.phint{display:none;position:absolute;inset:0;flex-direction:column;align-items:center;justify-content:center;gap:9px;
+  border:1.5px dashed rgba(236,200,117,.55);border-radius:14px;color:#d2c193;font-size:12.5px;
+  letter-spacing:.05em;text-align:center;padding:14px}
+img.missing ~ .phint{display:flex}
+.phint svg{width:26px;height:26px;stroke:#d2c193;fill:none}
+
+/* ===== ① 情书盒 信纸 ===== */
+.letter-paper{position:relative;margin-top:6px;background:var(--paper);color:var(--ink);border-radius:6px;
+  padding:30px 24px 32px;font-family:var(--hand);font-size:16.5px;line-height:2.05;
+  box-shadow:0 12px 28px rgba(0,0,0,.4),inset 0 0 34px rgba(180,150,90,.18);
+  background-image:repeating-linear-gradient(transparent,transparent 31px,rgba(150,120,70,.2) 32px)}
+.letter-paper p{margin-bottom:4px;text-indent:2em}
+.letter-paper p.salut{text-indent:0}
+.letter-sign{margin-top:16px;text-align:right;font-size:17px}
+.letter-sign .from{display:block;font-size:12.5px;color:#8a7a5c;margin-bottom:3px;letter-spacing:.1em}
+
+/* ===== ② 幸运券盒 ===== */
+.scroll-area{position:relative;margin:22px 0 6px;min-height:120px;border-radius:14px;
+  background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);
+  display:flex;align-items:center;justify-content:center;text-align:center;padding:20px;overflow:hidden}
+.scroll-text{font-family:var(--serif);font-size:18px;letter-spacing:.05em;color:var(--gold-bright);line-height:1.7}
+.scroll-text.rolling{opacity:.8}
+.ticket{display:none;position:relative;margin:22px auto 6px;max-width:340px;
+  background:linear-gradient(160deg,#fbe6ac,#ecc875 55%,#d8ac54);color:#57431a;border-radius:12px;
+  padding:28px 30px;box-shadow:0 15px 32px rgba(220,180,90,.38)}
+.ticket.show{display:block;animation:ticketIn .5s cubic-bezier(.22,1,.36,1)}
+@keyframes ticketIn{from{transform:translateY(18px) scale(.92);opacity:0}to{transform:none;opacity:1}}
+.ticket::before,.ticket::after{content:'';position:absolute;left:14px;right:14px;border-top:2px dashed rgba(90,68,23,.5)}
+.ticket::before{top:13px}.ticket::after{bottom:13px}
+.ticket .notch{position:absolute;top:50%;width:18px;height:18px;border-radius:50%;background:#121a3f;transform:translateY(-50%)}
+.ticket .notch.l{left:-9px}.ticket .notch.r{right:-9px}
+.ticket .tk-label{font-size:11.5px;letter-spacing:.32em;color:#8a6c2a;text-align:center}
+.ticket .tk-text{margin-top:13px;font-family:var(--serif);font-size:18px;line-height:1.75;text-align:center;font-weight:600}
+.ticket .tk-no{margin-top:14px;text-align:center;font-size:11px;letter-spacing:.22em;color:#8a6c2a}
+.draw-btn{display:block;margin:20px auto 4px;padding:13px 38px;border-radius:30px;
+  background:linear-gradient(180deg,#fdebb4,#eec873);color:#4a3c17;font-size:15px;letter-spacing:.2em}
+
+/* ===== ③ 爱心盒 全屏舞台 ===== */
+#stage{position:fixed;inset:0;z-index:70;display:none;overflow:hidden}
+#stage.show{display:block}
+#stage.dark{background:#04060f}
+.heart-big{position:absolute;left:50%;top:40%;width:60vw;max-width:330px;transform:translate(-50%,-50%);
+  animation:beat 1.3s ease-in-out infinite}
+.heart-big svg{width:100%;height:auto;filter:drop-shadow(0 0 32px rgba(255,90,150,.65))}
+@keyframes beat{0%,100%{transform:translate(-50%,-50%) scale(1)}15%{transform:translate(-50%,-50%) scale(1.13)}
+  30%{transform:translate(-50%,-50%) scale(1)}45%{transform:translate(-50%,-50%) scale(1.08)}}
+.heart-word{position:absolute;left:0;right:0;top:68%;text-align:center;font-family:var(--serif);
+  font-size:clamp(22px,6.4vw,32px);letter-spacing:.38em;color:var(--gold-bright);
+  text-shadow:0 0 26px rgba(240,210,140,.65)}
+.h-particle{position:absolute;left:50%;top:40%;will-change:transform,opacity}
+.wish-cake{position:absolute;left:50%;top:42%;width:58vw;max-width:300px;transform:translate(-50%,-50%);
+  animation:floaty 3s ease-in-out infinite}
+.wish-cake svg{width:100%;height:auto;filter:drop-shadow(0 16px 30px rgba(0,0,0,.5))}
+@keyframes floaty{0%,100%{transform:translate(-50%,-50%) translateY(0)}50%{transform:translate(-50%,-50%) translateY(-9px)}}
+.wish-word{position:absolute;left:0;right:0;top:70%;text-align:center;font-family:var(--serif);
+  font-size:clamp(23px,6.8vw,33px);letter-spacing:.4em;text-indent:.4em;color:var(--gold-bright);
+  text-shadow:0 0 26px rgba(240,210,140,.7)}
+
+/* ===== ④ 电台盒 ===== */
+.radio{margin-top:22px;border-radius:16px;padding:22px 20px;background:linear-gradient(180deg,#212b60,#161e46);
+  border:1px solid rgba(255,255,255,.08)}
+.radio-fm{text-align:center;font-size:13px;letter-spacing:.2em;color:var(--gold-bright)}
+.radio-body{display:flex;align-items:center;gap:22px;margin:22px 0 16px}
+.vinyl{position:relative;width:118px;height:118px;border-radius:50%;flex:0 0 auto;
+  background:repeating-radial-gradient(circle at center,#3a3f5c 0 2px,#171a26 2px 4px);
+  border:1px solid rgba(255,255,255,.14)}
+.vinyl .vlabel{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:44px;height:44px;border-radius:50%;
+  background:linear-gradient(160deg,#ff95bd,#d8487f);display:flex;align-items:center;justify-content:center;
+  font-size:9px;color:#fff;letter-spacing:.04em;text-align:center;line-height:1.2}
+.vinyl.spin{animation:spin 4s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.eq{flex:1;display:flex;align-items:flex-end;justify-content:center;gap:7px;height:92px;min-width:0}
+.eq span{width:9px;border-radius:5px;background:linear-gradient(180deg,#ffc2da,#ff7fb2);height:18%}
+.eq.playing span{animation:eqb .8s ease-in-out infinite}
+.eq.playing span:nth-child(2){animation-delay:.12s}.eq.playing span:nth-child(3){animation-delay:.24s}
+.eq.playing span:nth-child(4){animation-delay:.36s}.eq.playing span:nth-child(5){animation-delay:.48s}
+@keyframes eqb{0%,100%{height:16%}50%{height:96%}}
+.radio-status{text-align:center;font-size:13px;color:var(--mut);letter-spacing:.08em;min-height:18px}
+.radio-btn{display:block;margin:18px auto 2px;padding:12px 36px;border-radius:28px;
+  background:linear-gradient(180deg,#ffd4e4,#ff95bd);color:#5a1738;font-size:15px;letter-spacing:.18em}
+
+/* ===== ⑤ 搞怪盒（全屏舞台） ===== */
+.ghost-tip{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px}
+.ghost-tip .big{font-family:var(--serif);font-size:25px;letter-spacing:.12em}
+.ghost-tip .small{font-size:13.5px;color:var(--mut);letter-spacing:.12em}
+.ghost{position:absolute;width:76px;height:86px;cursor:pointer;will-change:left,top;
+  animation:ghostIn .32s cubic-bezier(.22,1,.36,1)}
+@keyframes ghostIn{from{transform:scale(.3);opacity:0}to{transform:scale(1);opacity:1}}
+.ghost.boom{animation:ghostBoom .45s ease forwards}
+@keyframes ghostBoom{to{transform:scale(2.5);opacity:0}}
+.ghost-result{position:absolute;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:28px}
+.ghost-result.show{display:flex}
+.ghost-result .photo-slot{width:min(58vw,230px);margin:0;min-height:0;aspect-ratio:1/1}
+.ghost-result .line{font-family:var(--serif);font-size:17px;color:var(--gold-bright);text-align:center;letter-spacing:.06em}
+.ghost-back{padding:11px 32px;border-radius:26px;background:linear-gradient(180deg,#fdebb4,#eec873);color:#4a3c17;font-size:14px;letter-spacing:.16em}
+#stage.shk{animation:scrshake .42s}
+@keyframes scrshake{0%,100%{transform:translate(0,0)}25%{transform:translate(-6px,3px)}50%{transform:translate(5px,-4px)}75%{transform:translate(-3px,-2px)}}
+
+/* ===== ⑥ 空盒子（全屏舞台） ===== */
+.flash{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none}
+.flash.go{animation:flashGo .5s ease}
+@keyframes flashGo{0%{opacity:0}15%{opacity:1}100%{opacity:0}}
+.empty-word{position:absolute;left:0;right:0;top:46%;text-align:center;font-family:var(--serif);
+  font-size:21px;letter-spacing:.14em;color:var(--star);opacity:0;transform:translateY(14px);transition:all .8s ease}
+.empty-word.show{opacity:1;transform:none}
+.empty-result{position:absolute;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;gap:15px;padding:30px}
+.empty-result.show{display:flex;animation:fadeIn 1.2s ease}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.empty-result .photo-slot{width:min(56vw,224px);margin:0;min-height:0;aspect-ratio:3/4}
+.empty-result .cap{font-family:var(--serif);font-size:16px;color:var(--gold-bright);text-align:center;letter-spacing:.06em}
+.empty-close{padding:12px 34px;border-radius:28px;background:linear-gradient(180deg,#fdebb4,#eec873);color:#4a3c17;font-size:15px;letter-spacing:.16em}
+
+/* ===== ⑦ 运势签盒 ===== */
+.fortune-card{display:none;position:relative;margin:22px auto 6px;max-width:320px;border-radius:14px;padding:30px 26px;
+  background:linear-gradient(170deg,#2c2554,#1a1540);border:1.5px solid var(--gold);
+  box-shadow:0 0 34px rgba(236,200,117,.42),0 16px 34px rgba(0,0,0,.5);text-align:center}
+.fortune-card.show{display:block;animation:fortuneIn .7s cubic-bezier(.22,1,.36,1)}
+@keyframes fortuneIn{from{transform:translateY(26px) scale(.8);opacity:0}to{transform:none;opacity:1}}
+.fortune-card .flevel{font-family:var(--serif);font-size:28px;color:var(--gold-bright);letter-spacing:.22em;
+  text-shadow:0 0 18px rgba(240,210,140,.75)}
+.fortune-card .ftext{margin-top:18px;font-family:var(--serif);font-size:17px;line-height:1.9;color:#f3e6c4;letter-spacing:.06em}
+.fortune-card .fseal{margin-top:18px;font-size:11px;letter-spacing:.3em;color:#b99a55}
+
+/* ===== ⑧ 成就墙 ===== */
+.ach-list{margin-top:20px;display:flex;flex-direction:column;gap:15px}
+.ach{display:flex;gap:14px;align-items:flex-start}
+.ach .ano{flex:0 0 auto;width:30px;height:30px;border-radius:50%;border:1px solid var(--gold);
+  display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:14px;color:var(--gold-bright)}
+.ach .abody{min-width:0}.ach .abody h4{font-family:var(--serif);font-size:16.5px;font-weight:600}
+.ach .abody p{margin-top:3px;font-size:13px;color:#9aa2c8;line-height:1.55}
+
+/* ===== 收尾 蛋糕页 ===== */
+#view-cake{position:relative;min-height:100vh;display:none;flex-direction:column;align-items:center;justify-content:center;
+  padding:52px 24px 60px;background:radial-gradient(120% 90% at 50% 8%,#1f2a64,#0b1136 55%,#060a22);overflow:hidden}
+#view-cake.active{display:flex}
+.cake-head{text-align:center;z-index:3}
+.cake-head h2{font-family:var(--serif);font-size:24px;letter-spacing:.08em}
+.cake-head p{margin-top:10px;font-size:13.5px;color:var(--mut);letter-spacing:.1em}
+.cake-wrap{position:relative;margin:26px 0 8px;width:min(86vw,360px);z-index:3}
+.cake-svg{width:100%;height:auto;display:block}
+.candle{cursor:pointer}
+.candle .flame{transform-origin:50% 100%;animation:flicker .5s ease-in-out infinite alternate}
+@keyframes flicker{from{transform:scaleY(1) scaleX(1) rotate(-2deg)}to{transform:scaleY(1.14) scaleX(.93) rotate(2deg)}}
+.candle.out .flame{display:none}
+.candle .smoke{opacity:0}
+.candle.out .smoke{animation:smoke 1.3s ease forwards}
+@keyframes smoke{0%{opacity:.7}100%{opacity:0;transform:translateY(-24px)}}
+.cake-hint{margin-top:16px;font-size:13px;color:var(--mut);letter-spacing:.14em;text-align:center;z-index:3;min-height:18px}
+.cake-bless{position:absolute;left:0;right:0;top:6%;text-align:center;font-family:var(--serif);
+  font-size:clamp(21px,6.2vw,33px);color:var(--gold-bright);letter-spacing:.1em;white-space:nowrap;
+  text-shadow:0 0 26px rgba(240,210,140,.7);opacity:0;transform:translateY(12px);transition:all .9s ease;z-index:6}
+.cake-bless.show{opacity:1;transform:none}
+.cake-bless.b2{top:calc(6% + 47px);font-size:clamp(15px,4.4vw,22px);letter-spacing:.24em;color:#ffe9c0;font-weight:400}
+
+/* ===== 粒子特效画布 ===== */
+#fx{position:fixed;inset:0;z-index:78;pointer-events:none}
+@media (prefers-reduced-motion:reduce){
+  .glow-btn,.s1,.s2,.s3,.heart-big,.vinyl.spin,.eq.playing span,.candle .flame,.wish-cake{animation:none}
+}
+</style>
+</head>
+<body>
+
+<!-- ===== 视图：开场页 ===== -->
+<section id="view-intro" class="view active">
+  <div class="starfield s1"></div>
+  <div class="starfield s2"></div>
+  <div class="starfield s3"></div>
+  <div id="meteor-layer"></div>
+  <div class="intro-inner">
+    <p class="intro-pre">A LITTLE UNIVERSE FOR YOU</p>
+    <h1 class="intro-title">杨欣羽，<br>生日快乐</h1>
+    <p class="intro-sub">愿你眼里有星光，身旁有温柔</p>
+    <button id="enter-btn" class="glow-btn">点击有惊喜</button>
+  </div>
+</section>
+
+<!-- ===== 视图：主页 礼物塔 ===== -->
+<section id="view-home" class="view">
+  <img class="home-bg" src="assets/capylulu.jpg" alt="">
+  <div class="home-veil"></div>
+  <header class="home-head">
+    <h2>送给你的八份心意</h2>
+    <p>点开每一个盲盒，慢慢拆，别着急</p>
+  </header>
+  <div class="tower">
+    <div class="trow r1" id="row-1"></div>
+    <div class="trow r3" id="row-3"></div>
+    <div class="trow r4" id="row-4"></div>
+  </div>
+  <div class="counter" id="counter">已开启 0 / 8</div>
+  <button class="final-btn" id="final-btn" hidden>最后的惊喜</button>
+</section>
+
+<!-- 静音开关 -->
+<button id="mute-btn" role="switch" aria-checked="false" aria-label="静音开关">
+  <svg viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path id="mute-waves" d="M16 8.5a5 5 0 010 7M18.5 6a8.5 8.5 0 010 12" fill="none" stroke="#eef0ff" stroke-width="1.8" stroke-linecap="round"/></svg>
+</button>
+
+<!-- ===== 视图：蛋糕页 ===== -->
+<section id="view-cake" class="view">
+  <div class="cake-head">
+    <h2>许个愿吧</h2>
+    <p>点击蜡烛，一根根吹灭它们</p>
+  </div>
+  <div class="cake-wrap">
+    <div class="cake-bless" id="cake-bless">杨欣羽生日快乐</div>
+    <div class="cake-bless b2" id="cake-bless2">现在可以拆礼物啦！</div>
+    <svg class="cake-svg" viewBox="0 0 360 360" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="cakeG" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#fff7ec"><stop offset="1" stop-color="#ffd3ab"></linearGradient>
+        <linearGradient id="cakeSide" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0" stop-color="#000" stop-opacity="0"><stop offset="1" stop-color="#c98a52" stop-opacity=".22"></linearGradient>
+        <radialGradient id="flameG" cx=".5" cy=".62" r=".6">
+          <stop offset="0" stop-color="#fff6c8"><stop offset=".45" stop-color="#ffc24d"><stop offset="1" stop-color="#ff7426"></radialGradient>
+      </defs>
+
+      <!-- 蜡烛 3 根 -->
+      <g class="candle" data-i="0">
+        <rect x="146" y="104" width="8" height="38" rx="2" fill="#ff8fbb"/>
+        <line x1="146" y1="115" x2="154" y2="115" stroke="#ffd9e8" stroke-width="2.4"/>
+        <line x1="146" y1="129" x2="154" y2="129" stroke="#ffd9e8" stroke-width="2.4"/>
+        <line x1="150" y1="104" x2="150" y2="99" stroke="#6b4a2f" stroke-width="1.6"/>
+        <path class="flame" d="M150 100 C143 94 143 86 150 78 C157 86 157 94 150 100 Z" fill="url(#flameG)"/>
+        <path class="smoke" d="M150 80 q5 -6 1 -14" fill="none" stroke="#c9c9e2" stroke-width="1.6" stroke-linecap="round"/>
+      </g>
+      <g class="candle" data-i="1">
+        <rect x="176" y="104" width="8" height="38" rx="2" fill="#ff8fbb"/>
+        <line x1="176" y1="115" x2="184" y2="115" stroke="#ffd9e8" stroke-width="2.4"/>
+        <line x1="176" y1="129" x2="184" y2="129" stroke="#ffd9e8" stroke-width="2.4"/>
+        <line x1="180" y1="104" x2="180" y2="99" stroke="#6b4a2f" stroke-width="1.6"/>
+        <path class="flame" d="M180 100 C173 94 173 86 180 78 C187 86 187 94 180 100 Z" fill="url(#flameG)"/>
+        <path class="smoke" d="M180 80 q5 -6 1 -14" fill="none" stroke="#c9c9e2" stroke-width="1.6" stroke-linecap="round"/>
+      </g>
+      <g class="candle" data-i="2">
+        <rect x="206" y="104" width="8" height="38" rx="2" fill="#ff8fbb"/>
+        <line x1="206" y1="115" x2="214" y2="115" stroke="#ffd9e8" stroke-width="2.4"/>
+        <line x1="206" y1="129" x2="214" y2="129" stroke="#ffd9e8" stroke-width="2.4"/>
+        <line x1="210" y1="104" x2="210" y2="99" stroke="#6b4a2f" stroke-width="1.6"/>
+        <path class="flame" d="M210 100 C203 94 203 86 210 78 C217 86 217 94 210 100 Z" fill="url(#flameG)"/>
+        <path class="smoke" d="M210 80 q5 -6 1 -14" fill="none" stroke="#c9c9e2" stroke-width="1.6" stroke-linecap="round"/>
+      </g>
+
+      <!-- 四层蛋糕 -->
+      <g>
+        <rect x="108" y="142" width="144" height="46" rx="9" fill="url(#cakeG)"/>
+        <rect x="108" y="142" width="144" height="46" rx="9" fill="url(#cakeSide)"/>
+        <g fill="#fffaf2">
+          <circle cx="120" cy="142" r="6"/><circle cx="144" cy="142" r="6"/><circle cx="168" cy="142" r="6"/>
+          <circle cx="192" cy="142" r="6"/><circle cx="216" cy="142" r="6"/><circle cx="240" cy="142" r="6"/></g>
+      </g>
+      <g>
+        <rect x="82" y="188" width="196" height="48" rx="10" fill="url(#cakeG)"/>
+        <rect x="82" y="188" width="196" height="48" rx="10" fill="url(#cakeSide)"/>
+        <g fill="#fffaf2">
+          <circle cx="94" cy="188" r="6.5"/><circle cx="118" cy="188" r="6.5"/><circle cx="142" cy="188" r="6.5"/>
+          <circle cx="166" cy="188" r="6.5"/><circle cx="190" cy="188" r="6.5"/><circle cx="214" cy="188" r="6.5"/>
+          <circle cx="238" cy="188" r="6.5"/><circle cx="262" cy="188" r="6.5"/></g>
+      </g>
+      <g>
+        <rect x="56" y="236" width="248" height="50" rx="11" fill="url(#cakeG)"/>
+        <rect x="56" y="236" width="248" height="50" rx="11" fill="url(#cakeSide)"/>
+        <g fill="#fffaf2">
+          <circle cx="68" cy="236" r="7"/><circle cx="92" cy="236" r="7"/><circle cx="116" cy="236" r="7"/>
+          <circle cx="140" cy="236" r="7"/><circle cx="164" cy="236" r="7"/><circle cx="188" cy="236" r="7"/>
+          <circle cx="212" cy="236" r="7"/><circle cx="236" cy="236" r="7"/><circle cx="260" cy="236" r="7"/>
+          <circle cx="284" cy="236" r="7"/></g>
+      </g>
+      <g>
+        <rect x="30" y="286" width="300" height="56" rx="12" fill="url(#cakeG)"/>
+        <rect x="30" y="286" width="300" height="56" rx="12" fill="url(#cakeSide)"/>
+        <g fill="#fffaf2">
+          <circle cx="42" cy="286" r="7.5"/><circle cx="66" cy="286" r="7.5"/><circle cx="90" cy="286" r="7.5"/>
+          <circle cx="114" cy="286" r="7.5"/><circle cx="138" cy="286" r="7.5"/><circle cx="162" cy="286" r="7.5"/>
+          <circle cx="186" cy="286" r="7.5"/><circle cx="210" cy="286" r="7.5"/><circle cx="234" cy="286" r="7.5"/>
+          <circle cx="258" cy="286" r="7.5"/><circle cx="282" cy="286" r="7.5"/><circle cx="306" cy="286" r="7.5"/></g>
+      </g>
+      <!-- 彩色糖珠 -->
+      <circle cx="130" cy="168" r="3.4" fill="#ff8fbb"/><circle cx="152" cy="174" r="3.4" fill="#7fb8ff"/><circle cx="174" cy="168" r="3.4" fill="#9bdca6"/><circle cx="196" cy="174" r="3.4" fill="#ffd166"/><circle cx="216" cy="168" r="3.4" fill="#b287ff"/>
+      <circle cx="102" cy="214" r="3.6" fill="#ff8fbb"/><circle cx="128" cy="220" r="3.6" fill="#7fb8ff"/><circle cx="154" cy="214" r="3.6" fill="#ffd166"/><circle cx="180" cy="220" r="3.6" fill="#9bdca6"/><circle cx="206" cy="214" r="3.6" fill="#ff9f5a"/><circle cx="232" cy="220" r="3.6" fill="#b287ff"/><circle cx="256" cy="214" r="3.6" fill="#ff6b6b"/>
+      <circle cx="76" cy="262" r="3.8" fill="#7fb8ff"/><circle cx="104" cy="268" r="3.8" fill="#ff8fbb"/><circle cx="132" cy="262" r="3.8" fill="#9bdca6"/><circle cx="160" cy="268" r="3.8" fill="#ffd166"/><circle cx="188" cy="262" r="3.8" fill="#b287ff"/><circle cx="216" cy="268" r="3.8" fill="#ff9f5a"/><circle cx="244" cy="262" r="3.8" fill="#ff6b6b"/><circle cx="272" cy="268" r="3.8" fill="#4ecdc4"/>
+      <circle cx="54" cy="312" r="4" fill="#ff8fbb"/><circle cx="84" cy="318" r="4" fill="#7fb8ff"/><circle cx="114" cy="312" r="4" fill="#ffd166"/><circle cx="144" cy="318" r="4" fill="#9bdca6"/><circle cx="174" cy="312" r="4" fill="#b287ff"/><circle cx="204" cy="318" r="4" fill="#ff9f5a"/><circle cx="234" cy="312" r="4" fill="#ff6b6b"/><circle cx="264" cy="318" r="4" fill="#4ecdc4"/><circle cx="294" cy="312" r="4" fill="#ffb3d0"/>
+      <!-- 点击热区：蜡烛 + 火焰 -->
+      <rect class="chot" data-i="0" x="135" y="28" width="30" height="118" fill="#fff" fill-opacity="0"/>
+      <rect class="chot" data-i="1" x="165" y="28" width="30" height="118" fill="#fff" fill-opacity="0"/>
+      <rect class="chot" data-i="2" x="195" y="28" width="30" height="118" fill="#fff" fill-opacity="0"/>
+      <!-- 托盘 -->
+      <ellipse cx="180" cy="346" rx="160" ry="11" fill="#0a0f2c" opacity=".55"/>
+    </svg>
+  </div>
+  <div class="cake-hint" id="cake-hint">还剩 3 根蜡烛</div>
+</section>
+
+<!-- 全屏舞台：爱心 / 搞怪 / 空盒 -->
+<div id="stage"></div>
+
+<!-- 静态预载照片（确保发布扫描器识别 src） -->
+<div aria-hidden="true" hidden>
+  <img id="pre-ghost" src="assets/photos/ghost.jpg" alt="">
+  <img id="pre-surprise" src="assets/photos/surprise.jpg" alt="">
+</div>
+
+<!-- 粒子特效画布 -->
+<canvas id="fx"></canvas>
+
+<!-- 音频 -->
+<audio id="bgm" src="assets/audio/bgm.m4a" loop preload="none"></audio>
+<audio id="voice" src="assets/audio/voice.m4a" preload="none"></audio>
+
+<!-- ===== 通用弹层：五个盒子 ===== -->
+<div id="overlay">
+
+  <!-- ① 情书盒 -->
+  <div class="modal-card" id="m-letter">
+    <button class="close-x" data-close aria-label="关闭">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+    <h3 class="m-title">给杨欣羽的一封信</h3>
+    <div class="photo-slot">
+      <img src="assets/photos/letter.jpg" alt="合照" onerror="this.classList.add('missing')">
+      <div class="phint">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6"><path d="M4 8h3l2-2h6l2 2h3v11H4z"/><circle cx="12" cy="13.2" r="3.2"/></svg>
+        合照位置<br>请将照片命名为 letter.jpg 放入 assets\photos</div>
+    </div>
+    <div class="letter-paper">
+      <p class="salut">杨欣羽小朋友：</p>
+      <p>祝你生日快乐！祝你不必成为厉害的大人，永远做快乐的小孩！</p>
+      <p>系统检测到：你的可爱，已成功更新至最新版本。</p>
+      <p>希望你以后的生活，不是“终于熬过去了”，而是“还好我没有错过”。</p>
+      <p>认识你很开心，和你聊天也很快乐，不要有压力和负担。</p>
+      <p>愿你被爱包裹，永远被自由照耀。</p>
+      <p>风传信笺，雨落诗篇，新岁温柔开篇！</p>
+      <div class="letter-sign"><span class="from">FROM · LBY</span>LBY</div>
+    </div>
+  </div>
+
+  <!-- ② 幸运券盒 -->
+  <div class="modal-card" id="m-ticket">
+    <button class="close-x" data-close aria-label="关闭">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+    <h3 class="m-title">幸运券 · 抽奖</h3>
+    <p class="m-sub">抽一张，我照做。不许耍赖。</p>
+    <div class="scroll-area"><div class="scroll-text" id="ticket-scroll">点下面按钮，看看今天抽到什么好运</div></div>
+    <div class="ticket" id="ticket-card">
+      <span class="notch l"></span><span class="notch r"></span>
+      <div class="tk-label">幸 运 券</div>
+      <div class="tk-text" id="ticket-text"></div>
+      <div class="tk-no" id="ticket-no">NO. 000</div>
+    </div>
+    <button class="draw-btn" id="ticket-draw">抽一张</button>
+  </div>
+
+  <!-- ④ 电台盒 -->
+  <div class="modal-card" id="m-radio">
+    <button class="close-x" data-close aria-label="关闭">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+    <h3 class="m-title">杨欣羽 FM</h3>
+    <div class="radio">
+      <div class="radio-fm">FM 100.7 · 杨欣羽专属电台</div>
+      <div class="radio-body">
+        <div class="vinyl" id="vinyl"><span class="vlabel">杨欣羽<br>专属</span></div>
+        <div class="eq" id="eq"><span></span><span></span><span></span><span></span><span></span></div>
+      </div>
+      <div class="radio-status" id="radio-status">未播放 · 点击下方按钮开始</div>
+      <button class="radio-btn" id="radio-btn">播放</button>
+    </div>
+  </div>
+
+  <!-- ⑦ 运势签盒 -->
+  <div class="modal-card" id="m-fortune">
+    <button class="close-x" data-close aria-label="关闭">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+    <h3 class="m-title">杨欣羽专属签</h3>
+    <div class="scroll-area"><div class="scroll-text" id="fortune-scroll">心诚则灵，点下面求一签</div></div>
+    <div class="fortune-card" id="fortune-card">
+      <div class="flevel" id="fortune-level"></div>
+      <div class="ftext" id="fortune-text"></div>
+      <div class="fseal">杨欣羽专属 · 灵验无比</div>
+    </div>
+    <button class="draw-btn" id="fortune-draw">求一签</button>
+  </div>
+
+  <!-- ⑧ 成就墙 -->
+  <div class="modal-card" id="m-ach">
+    <button class="close-x" data-close aria-label="关闭">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+    <h3 class="m-title">杨欣羽同志成就墙</h3>
+    <p class="m-sub">不完全统计，欢迎补充。</p>
+    <div class="photo-slot">
+      <img src="assets/photos/wall.jpg" alt="我们的照片" onerror="this.classList.add('missing')">
+      <div class="phint">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6"><path d="M4 8h3l2-2h6l2 2h3v11H4z"/><circle cx="12" cy="13.2" r="3.2"/></svg>
+        我们的照片位置<br>请将照片命名为 wall.jpg 放入 assets\photos</div>
+    </div>
+    <div class="ach-list">
+      <div class="ach"><span class="ano">1</span><div class="abody"><h4>可爱天花板</h4><p>凭实力可爱了一整年，地位至今无人能撼动。</p></div></div>
+      <div class="ach"><span class="ano">2</span><div class="abody"><h4>干饭小能手</h4><p>尝遍美食无数，仍对每一餐保持满分热情。</p></div></div>
+      <div class="ach"><span class="ano">3</span><div class="abody"><h4>元气满格选手</h4><p>即便偶尔熬夜，第二天也能把日子过得热气腾腾。</p></div></div>
+      <div class="ach"><span class="ano">4</span><div class="abody"><h4>无畏契约赋能选手</h4><p>奶妈单核带队，枪枪爆头，带带我，带带我。</p></div></div>
+      <div class="ach"><span class="ano">5</span><div class="abody"><h4>生日快乐本乐</h4><p>成功解锁全新一岁，继续闪闪发光、好运连连。</p></div></div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+/* ============ 数据 ============ */
+const TICKETS=[
+ "奶茶自由券：兑换任意一杯奶茶，LBY买单，加料不限。",
+ "网吧开黑券：疲惫的时候，凭此券可兑换网吧开黑一次，不限时长。",
+ "电影观赏券：若有想看的电影，LBY随时带你去看，而且是IMAX加可乐。",
+ "点菜你说了算券：一顿饭全由你点菜，或者带你去探店，LBY负责陪吃和付钱。",
+ "心愿兑换券：在合理范围内，可以满足你一个小小的愿望。",
+ "安全保障券：在你随时需要帮助的时候，LBY会及时帮你解决问题。",
+ "心情恢复券：凭此券向LBY倾诉，想方设法让你开心。"
+];
+const FORTUNES=[
+ {level:"上上签",text:"所求皆如愿，所行皆坦途，一岁一新，万事胜意。"},
+ {level:"上上签",text:"财运亨通笑口开，想买的都在打折，想吃的都不长胖。"},
+ {level:"大　吉",text:"良友常相伴，岁岁皆欢愉，四季都有好事发生。"},
+ {level:"大　吉",text:"好运如星河长明，烦恼似流星划过，许的愿都会发芽。"},
+ {level:"上上签",text:"学业事业节节高，努力都被看见，付出都有回响。"},
+ {level:"吉",text:"身体健康，睡眠香甜，醒来每天都是好心情。"}
+];
+const BOXES=[{id:1,key:'letter'},{id:2,key:'ticket'},{id:3,key:'heart'},{id:4,key:'radio'},
+ {id:5,key:'ghost'},{id:6,key:'empty'},{id:7,key:'fortune'},{id:8,key:'ach'}];
+const PALETTES=[
+ ['#8a6bff','#a48bff','#ffd166'],['#ff7aa8','#ff9cc0','#ffe08a'],
+ ['#5db7ff','#85cbff','#ffd166'],['#ff9f5a','#ffb97e','#ffe08a'],
+ ['#7bd389','#97dfa3','#ffd166'],['#b287ff','#c6a4ff','#ff9cc0'],
+ ['#ff6b6b','#ff8e8e','#ffd166'],['#4ecdc4','#72d9d1','#ffe08a']];
+const cardMap={letter:'m-letter',ticket:'m-ticket',radio:'m-radio',fortune:'m-fortune',ach:'m-ach'};
+
+/* ============ 工具 ============ */
+const $=s=>document.querySelector(s);
+const $$=s=>Array.from(document.querySelectorAll(s));
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function showView(id){$$('.view').forEach(v=>v.classList.remove('active'));$('#'+id).classList.add('active');window.scrollTo(0,0);}
+
+/* ============ 流星 ============ */
+function spawnMeteor(){
+ const m=document.createElement('div');m.className='meteor';
+ m.style.left=(58+Math.random()*38)+'%';m.style.top=(-6+Math.random()*22)+'%';
+ $('#meteor-layer').appendChild(m);
+ setTimeout(()=>m.remove(),950);
+}
+setTimeout(spawnMeteor,700);
+setInterval(()=>{if($('#view-intro').classList.contains('active'))spawnMeteor();},2300);
+
+/* ============ 音频 ============ */
+const bgm=$('#bgm'),voice=$('#voice');
+bgm.volume=0.4;voice.volume=0.95;
+let muted=false,started=false,radioPlaying=false;
+function safePlay(el){const p=el.play();if(p&&p.catch)p.catch(()=>{});}
+function playBGM(){if(!muted)safePlay(bgm);}
+function pauseBGM(){bgm.pause();}
+function resumeBGM(){if(!muted&&!radioPlaying)safePlay(bgm);}
+$('#mute-btn').addEventListener('click',()=>{
+ muted=!muted;
+ const b=$('#mute-btn');b.classList.toggle('muted',muted);
+ b.setAttribute('aria-checked',muted);$('#mute-waves').style.display=muted?'none':'';
+ if(muted){bgm.pause();voice.pause();}else{if(started&&!radioPlaying)safePlay(bgm);}
+});
+
+/* ============ 开场 ============ */
+$('#enter-btn').addEventListener('click',()=>{started=true;playBGM();showView('view-home');renderTower();});
+
+/* ============ 礼物塔 ============ */
+let openedCount=0;const openedSet={};
+function giftSVG(body,lid,ribbon){
+ return `<svg viewBox="0 0 100 100">
+  <rect x="12" y="42" width="76" height="48" rx="5" fill="${body}"/>
+  <rect x="70" y="42" width="18" height="48" rx="4" fill="rgba(0,0,0,.13)"/>
+  <rect x="45" y="42" width="10" height="48" fill="${ribbon}"/>
+  <g class="lid">
+   <rect x="8" y="30" width="84" height="16" rx="5" fill="${lid}"/>
+   <rect x="45" y="30" width="10" height="16" fill="${ribbon}"/>
+  </g>
+  <path d="M50 30 C42 18 32 20 36 29 C40 36 50 30 50 30Z" fill="${ribbon}"/>
+  <path d="M50 30 C58 18 68 20 64 29 C60 36 50 30 50 30Z" fill="${ribbon}"/>
+ </svg>`;
+}
+function renderTower(){
+ const order=shuffle(BOXES.slice());
+ const rows=[['row-1',order.slice(0,1)],['row-3',order.slice(1,4)],['row-4',order.slice(4,8)]];
+ rows.forEach(([rid,items])=>{
+  const row=$('#'+rid);row.innerHTML='';
+  items.forEach(box=>{
+   const pal=PALETTES[(box.id-1)%PALETTES.length];
+   const el=document.createElement('div');el.className='gift';el.dataset.key=box.key;
+   el.innerHTML=giftSVG(pal[0],pal[1],pal[2]);
+   el.addEventListener('click',()=>onGiftClick(el,box));
+   row.appendChild(el);
+  });
+ });
+}
+function onGiftClick(el,box){
+ if(el.classList.contains('opened')||el.classList.contains('opening'))return;
+ el.classList.add('opening');
+ setTimeout(()=>{
+  el.classList.remove('opening');el.classList.add('opened');
+  if(!openedSet[box.key]){openedSet[box.key]=true;openedCount++;updateCounter();}
+  openBox(box.key);
+ },500);
+}
+function updateCounter(){
+ $('#counter').textContent=`已开启 ${openedCount} / 8`;
+ if(openedCount===8)$('#final-btn').hidden=false;
+}
+
+/* ============ 弹层路由 ============ */
+$$('#overlay .modal-card').forEach(c=>c.style.display='none');
+function openBox(key){
+ if(key==='heart')return playHeart();
+ if(key==='ghost')return playGhost();
+ if(key==='empty')return playEmpty();
+ $$('#overlay .modal-card').forEach(c=>c.style.display='none');
+ $('#'+cardMap[key]).style.display='block';
+ $('#overlay').classList.add('show');
+}
+function closeOverlay(){
+ $('#overlay').classList.remove('show');
+ if(radioPlaying)stopRadio();
+}
+$('#overlay').addEventListener('click',e=>{if(e.target===$('#overlay'))closeOverlay();});
+$$('[data-close]').forEach(b=>b.addEventListener('click',closeOverlay));
+$('#final-btn').addEventListener('click',()=>{if(radioPlaying)stopRadio();showView('view-cake');});
+
+/* ============ ② 幸运券 滚动抽奖 ============ */
+let ticketRolling=false;
+$('#ticket-draw').addEventListener('click',()=>{
+ if(ticketRolling)return;
+ const scroll=$('#ticket-scroll'),card=$('#ticket-card'),btn=$('#ticket-draw');
+ card.classList.remove('show');scroll.classList.add('rolling');
+ btn.disabled=true;btn.textContent='抽取中';ticketRolling=true;
+ let n=0;const total=18;
+ const timer=setInterval(()=>{
+  scroll.textContent=TICKETS[n%TICKETS.length];n++;
+  if(n>=total){
+   clearInterval(timer);
+   const idx=Math.floor(Math.random()*TICKETS.length);
+   scroll.classList.remove('rolling');scroll.textContent='抽中啦，就是这一张';
+   $('#ticket-text').textContent=TICKETS[idx];
+   $('#ticket-no').textContent='NO. '+String(idx+1).padStart(3,'0');
+   card.classList.add('show');
+   btn.disabled=false;btn.textContent='再抽一张';ticketRolling=false;
+  }
+ },70);
+});
+
+/* ============ ⑦ 运势签 滚动求签 ============ */
+let fortuneRolling=false;
+$('#fortune-draw').addEventListener('click',()=>{
+ if(fortuneRolling)return;
+ const scroll=$('#fortune-scroll'),card=$('#fortune-card'),btn=$('#fortune-draw');
+ card.classList.remove('show');scroll.classList.add('rolling');
+ btn.disabled=true;btn.textContent='求签中';fortuneRolling=true;
+ let n=0;const total=18;
+ const timer=setInterval(()=>{
+  const f=FORTUNES[n%FORTUNES.length];
+  scroll.textContent=f.level.replace(/　/g,'')+' · '+f.text;n++;
+  if(n>=total){
+   clearInterval(timer);
+   const idx=Math.floor(Math.random()*FORTUNES.length),p=FORTUNES[idx];
+   scroll.classList.remove('rolling');scroll.textContent='签已落定，请细看';
+   $('#fortune-level').textContent=p.level;$('#fortune-text').textContent=p.text;
+   card.classList.add('show');
+   btn.disabled=false;btn.textContent='再求一签';fortuneRolling=false;
+  }
+ },70);
+});
+
+/* ============ ④ 电台 ============ */
+function setRadioUI(playing){
+ $('#vinyl').classList.toggle('spin',playing);
+ $('#eq').classList.toggle('playing',playing);
+ $('#radio-btn').textContent=playing?'暂停':'播放';
+ $('#radio-status').textContent=playing?'正在播放 · 来自LBY的语音':'未播放 · 点击下方按钮开始';
+}
+function startRadio(){radioPlaying=true;setRadioUI(true);pauseBGM();voice.currentTime=0;safePlay(voice);}
+function stopRadio(){radioPlaying=false;setRadioUI(false);voice.pause();voice.currentTime=0;resumeBGM();}
+$('#radio-btn').addEventListener('click',()=>{if(muted)return;radioPlaying?stopRadio():startRadio();});
+voice.addEventListener('ended',()=>{radioPlaying=false;setRadioUI(false);resumeBGM();});
+
+/* ============ ③ 爱心盒 ============ */
+let heartTimer=null;
+function playHeart(){
+ const stage=$('#stage');stage.className='show dark';
+ stage.innerHTML=`
+  <div class="wish-cake"><svg viewBox="0 0 220 200">
+   <rect x="107" y="56" width="6" height="30" fill="#ff8fbb"/>
+   <line x1="107" y1="66" x2="113" y2="66" stroke="#ffd9e8" stroke-width="2"/>
+   <line x1="107" y1="76" x2="113" y2="76" stroke="#ffd9e8" stroke-width="2"/>
+   <path d="M110 55 C104 48 104 41 110 34 C116 41 116 48 110 55 Z" fill="#ffb347"/>
+   <path d="M110 52 C107 48 107 44 110 40 C113 44 113 48 110 52 Z" fill="#ffe9ab"/>
+   <rect x="72" y="84" width="76" height="40" rx="8" fill="#fff2e0"/>
+   <rect x="120" y="84" width="28" height="40" rx="6" fill="rgba(201,138,82,.14)"/>
+   <g fill="#fffaf2"><circle cx="84" cy="84" r="5.4"/><circle cx="96" cy="84" r="5.4"/><circle cx="108" cy="84" r="5.4"/><circle cx="120" cy="84" r="5.4"/><circle cx="132" cy="84" r="5.4"/></g>
+   <circle cx="92" cy="105" r="3" fill="#7fb8ff"/><circle cx="110" cy="111" r="3" fill="#ff9cc0"/><circle cx="126" cy="105" r="3" fill="#9bdca6"/>
+   <rect x="46" y="120" width="128" height="54" rx="10" fill="#ffe9d2"/>
+   <rect x="146" y="120" width="28" height="54" rx="8" fill="rgba(201,138,82,.13)"/>
+   <g fill="#fffaf2"><circle cx="58" cy="120" r="6"/><circle cx="72" cy="120" r="6"/><circle cx="86" cy="120" r="6"/><circle cx="100" cy="120" r="6"/><circle cx="114" cy="120" r="6"/><circle cx="128" cy="120" r="6"/><circle cx="142" cy="120" r="6"/><circle cx="156" cy="120" r="6"/><circle cx="170" cy="120" r="6"/></g>
+   <circle cx="78" cy="146" r="3.2" fill="#b287ff"/><circle cx="110" cy="152" r="3.2" fill="#ffb347"/><circle cx="142" cy="146" r="3.2" fill="#5db7ff"/>
+  </svg></div>
+  <div class="wish-word">天天开心</div>`;
+ gentleGlow();
+ heartTimer=setTimeout(closeStage,3700);
+}
+function gentleGlow(){
+ const stage=$('#stage');
+ const colors=['#ffe6a0','#ffd166','#ffc2da','#ffffff'];
+ for(let i=0;i<26;i++){
+  const p=document.createElement('div');p.className='h-particle';p.style.top='47%';
+  const size=6+Math.random()*10;
+  p.innerHTML=`<svg width="${size}" height="${size}" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="${colors[i%colors.length]}"/></svg>`;
+  stage.appendChild(p);
+  const ang=(i/26)*6.28+Math.random()*.3,dist=90+Math.random()*180;
+  const vx=Math.cos(ang)*dist,vy=Math.sin(ang)*dist-40,dur=2400+Math.random()*900;
+  p.animate([
+   {transform:'translate(-50%,-50%) translate(0,0)',opacity:.9},
+   {transform:`translate(-50%,-50%) translate(${vx}px,${vy+200}px)`,opacity:.8,offset:.55},
+   {transform:`translate(-50%,-50%) translate(${vx*.9}px,${vy+340}px)`,opacity:0}
+  ],{duration:dur,easing:'cubic-bezier(.25,.6,.4,1)',fill:'forwards'});
+ }
+}
+function burstHearts(){
+ const stage=$('#stage');
+ for(let i=0;i<34;i++){
+  const p=document.createElement('div');p.className='h-particle';
+  const size=10+Math.random()*16;
+  if(i%2===0)p.innerHTML=`<svg width="${size}" height="${size}" viewBox="0 0 24 24"><path d="M12 21 C3 14 1 9 3 5.5 C5 2.5 9 3 12 6.5 C15 3 19 2.5 21 5.5 C23 9 21 14 12 21Z" fill="${i%4===0?'#ff8fb8':'#ff5f96'}"/></svg>`;
+  else p.innerHTML=`<svg width="${size*.7}" height="${size*.7}" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="#ffb3d0"/></svg>`;
+  stage.appendChild(p);
+  const ang=Math.random()*Math.PI*2,dist=120+Math.random()*260;
+  const vx=Math.cos(ang)*dist,vy=Math.sin(ang)*dist-70;
+  const rot=Math.random()*720-360,dur=2200+Math.random()*900;
+  p.animate([
+   {transform:'translate(-50%,-50%) translate(0,0) rotate(0)',opacity:1},
+   {transform:`translate(-50%,-50%) translate(${vx}px,${vy+380}px) rotate(${rot}deg)`,opacity:.9,offset:.5},
+   {transform:`translate(-50%,-50%) translate(${vx*.9}px,${vy+520}px) rotate(${rot}deg)`,opacity:0}
+  ],{duration:dur,easing:'cubic-bezier(.2,.6,.4,1)',fill:'forwards'});
+ }
+}
+function closeStage(){const s=$('#stage');s.className='';s.innerHTML='';}
+
+/* ============ ⑤ 搞怪盒 ============ */
+let ghostEl=null,ghostMoveTimer=null,ghostDone=false;
+function ghostSVG(){
+ return `<svg viewBox="0 0 60 68" width="100%" height="100%">
+  <path d="M30 3 C14 3 5 15 5 30 L5 62 L13 55 L20 63 L28 55 L36 63 L44 55 L55 63 L55 30 C55 15 46 3 30 3 Z" fill="#fdfdfd" stroke="#d8e0ff" stroke-width="1.5"/>
+  <circle cx="23" cy="28" r="4.5" fill="#3a2b5c"/><circle cx="38" cy="28" r="4.5" fill="#3a2b5c"/></svg>`;
+}
+function playGhost(){
+ ghostDone=false;ghostEl=null;
+ const stage=$('#stage');stage.className='show';
+ stage.style.background='radial-gradient(circle at 50% 40%,#1d2658,#0c1233)';
+ stage.innerHTML=`<div class="ghost-tip"><div class="big">捉到鬼有奖励！</div><div class="small">点中它，有惊喜</div></div>`;
+ setTimeout(()=>{const t=$('.ghost-tip');if(t)t.style.display='none';startGhostMove();},1600);
+}
+function startGhostMove(){
+ ghostEl=document.createElement('div');ghostEl.className='ghost';ghostEl.innerHTML=ghostSVG();
+ $('#stage').appendChild(ghostEl);moveGhost();
+ ghostEl.addEventListener('click',hitGhost);
+}
+function moveGhost(){
+ if(ghostDone)return;
+ const w=window.innerWidth,h=window.innerHeight;
+ const x=Math.max(8,Math.random()*(w-92)),y=Math.max(72,Math.random()*(h-180));
+ ghostEl.style.left=x+'px';ghostEl.style.top=y+'px';
+ ghostEl.style.animation='none';void ghostEl.offsetWidth;ghostEl.style.animation='';
+ ghostMoveTimer=setTimeout(moveGhost,700+Math.random()*100);
+}
+function hitGhost(){
+ if(ghostDone)return;ghostDone=true;
+ clearTimeout(ghostMoveTimer);
+ ghostEl.classList.add('boom');$('#stage').classList.add('shk');
+ setTimeout(()=>{$('#stage').classList.remove('shk');showGhostResult();},450);
+}
+function showGhostResult(){
+ if(ghostEl)ghostEl.remove();
+ const res=document.createElement('div');res.className='ghost-result show';
+ res.innerHTML=`
+  <div class="photo-slot" id="gr-slot">
+   <div class="phint">我的照片位置<br>命名 ghost.jpg 放入 assets\\photos</div>
+  </div>
+  <div class="line">被你捉到啦！奖励你一个小噜噜，概不退换。</div>
+  <button class="ghost-back">收下奖励</button>`;
+ $('#stage').appendChild(res);
+ $('#gr-slot').insertBefore($('#pre-ghost').cloneNode(),$('#gr-slot').firstChild);
+ launchConfetti();
+ res.querySelector('.ghost-back').addEventListener('click',closeStage);
+}
+
+/* ============ ⑥ 空盒子 ============ */
+function playEmpty(){
+ const stage=$('#stage');stage.className='show';stage.style.background='#070b20';
+ stage.innerHTML=`
+  <div class="flash"></div>
+  <div class="empty-word">哎，等等——好像有东西</div>
+  <div class="empty-result">
+   <div class="photo-slot" id="ep-slot">
+    <div class="phint">惊喜照片位置<br>命名 surprise.jpg 放入 assets\\photos</div>
+   </div>
+   <div class="cap">找了半天，原来最好的礼物，大概就是拥有自己的热爱。</div>
+   <button class="empty-close">收下这份惊喜</button>
+  </div>`;
+ $('#ep-slot').insertBefore($('#pre-surprise').cloneNode(),$('#ep-slot').firstChild);
+ setTimeout(()=>{
+  $('.flash').classList.add('go');
+  setTimeout(()=>$('.empty-word').classList.add('show'),500);
+  setTimeout(()=>{
+   $('.empty-result').classList.add('show');
+   setTimeout(()=>{fireworks();launchConfetti();},4500);
+  },1700);
+ },3500);
+ $('.empty-close').addEventListener('click',closeStage);
+}
+
+/* ============ 舞台清理（覆盖，含幽灵复位） ============ */
+function closeStage(){
+ const s=$('#stage');clearTimeout(ghostMoveTimer);ghostDone=true;
+ s.className='';s.innerHTML='';s.style.background='';
+}
+
+/* ============ 粒子引擎（烟花 + 彩纸） ============ */
+const fx=$('#fx'),fctx=fx.getContext('2d');
+let fxParts=[],fxRunning=false;
+function sizeFx(){
+ const dpr=Math.min(window.devicePixelRatio||1,2);
+ fx.width=innerWidth*dpr;fx.height=innerHeight*dpr;
+ fx.style.width=innerWidth+'px';fx.style.height=innerHeight+'px';
+ fctx.setTransform(dpr,0,0,dpr,0,0);
+}
+sizeFx();window.addEventListener('resize',sizeFx);
+function fxLoop(){
+ if(!fxParts.length){fxRunning=false;fctx.clearRect(0,0,innerWidth,innerHeight);return;}
+ fctx.clearRect(0,0,innerWidth,innerHeight);
+ fxParts=fxParts.filter(p=>p.life>0);
+ fxParts.forEach(p=>{p.vy+=p.g;p.x+=p.vx;p.y+=p.vy;p.vx*=.985;p.rot+=p.vr;p.life--;
+  fctx.globalAlpha=Math.max(0,p.life/p.maxlife);fctx.fillStyle=p.color;
+  if(p.shape==='dot'){fctx.beginPath();fctx.arc(p.x,p.y,p.r,0,6.28);fctx.fill();}
+  else{fctx.save();fctx.translate(p.x,p.y);fctx.rotate(p.rot);fctx.fillRect(-p.w/2,-p.h/2,p.w,p.h);fctx.restore();}
+ });
+ fctx.globalAlpha=1;
+ requestAnimationFrame(fxLoop);
+}
+function ensureFx(){if(!fxRunning){fxRunning=true;requestAnimationFrame(fxLoop);}}
+function launchConfetti(x,y,n){
+ x=x??innerWidth/2;y=y??innerHeight*.32;n=n??120;
+ const colors=['#ff7fb2','#ffd166','#5db7ff','#7bd389','#b287ff','#ff9f5a'];
+ for(let i=0;i<n;i++)fxParts.push({shape:'rect',x:x+(Math.random()*80-40),y:y,
+  vx:Math.random()*9-4.5,vy:Math.random()*-9-3,g:.28+Math.random()*.12,
+  w:6+Math.random()*6,h:8+Math.random()*8,rot:Math.random()*6.28,vr:Math.random()*.3-.15,
+  color:colors[i%colors.length],life:110+Math.random()*60,maxlife:150});
+ ensureFx();
+}
+function fireworks(){
+ let rounds=0;
+ (function launch(){
+  const cx=innerWidth*(.18+Math.random()*.64),cy=innerHeight*(.18+Math.random()*.34);
+  const colors=['#ffd166','#ff7fb2','#5db7ff','#b287ff','#7bd389','#ff9f5a'];
+  const base=colors[Math.floor(Math.random()*colors.length)];
+  for(let i=0;i<46;i++){
+   const ang=(i/46)*6.28,sp=2+Math.random()*3.5;
+   fxParts.push({shape:'dot',x:cx,y:cy,vx:Math.cos(ang)*sp,vy:Math.sin(ang)*sp,g:.05,r:2+Math.random()*1.6,rot:0,vr:0,
+    color:Math.random()<.7?base:colors[Math.floor(Math.random()*colors.length)],life:55+Math.random()*35,maxlife:90});
+  }
+  ensureFx();if(++rounds<4)setTimeout(launch,560);
+ })();
+}
+
+/* ============ 蛋糕页 ============ */
+let candlesOut=0,cakeDone=false,pressTimer=null;
+const totalC=3;
+function blowOne(i){
+ const c=document.querySelector('#view-cake .candle[data-i="'+i+'"]');
+ if(!c||c.classList.contains('out')||cakeDone)return;
+ c.classList.add('out');candlesOut++;
+ const left=totalC-candlesOut;
+ $('#cake-hint').textContent=left>0?`还剩 ${left} 根蜡烛`:'愿望就要实现啦';
+ if(candlesOut===totalC)finishCake();
+}
+$$('#view-cake .candle').forEach(c=>c.addEventListener('click',()=>blowOne(c.dataset.i)));
+$$('#view-cake .chot').forEach(r=>r.addEventListener('click',()=>blowOne(r.dataset.i)));
+function blowAll(){
+ if(cakeDone)return;
+ $$('#view-cake .candle').forEach(c=>c.classList.add('out'));
+ candlesOut=totalC;finishCake();
+}
+function finishCake(){
+ cakeDone=true;$('#cake-hint').textContent='生日快乐';
+ const head=document.querySelector('#view-cake .cake-head');if(head)head.style.visibility='hidden';
+ setTimeout(()=>{fireworks();launchConfetti(null,null,150);},300);
+ setTimeout(()=>{$('#cake-bless').classList.add('show');$('#cake-bless2').classList.add('show');},750);
+}
+const cw=$('.cake-wrap');
+function pStart(){pressTimer=setTimeout(blowAll,650);}
+function pClear(){clearTimeout(pressTimer);}
+cw.addEventListener('touchstart',pStart,{passive:true});cw.addEventListener('touchend',pClear);
+cw.addEventListener('mousedown',pStart);cw.addEventListener('mouseup',pClear);cw.addEventListener('mouseleave',pClear);
+
+/* ===== 移除发布平台右下角品牌角标 ===== */
+(function(){
+ const KW=/豆包|豆包工作|AI\s*生成|aiforce|doubaoapps|miaoda/i;
+ const fixedOf=el=>{const s=getComputedStyle(el);return s.position==='fixed'||s.position==='sticky';};
+ const cornerOf=el=>{const r=el.getBoundingClientRect();
+  return r.width>0&&r.height>0&&r.bottom>innerHeight*0.8&&r.right>innerWidth*0.5
+   &&r.width<innerWidth*0.7&&r.height<innerHeight*0.45;};
+ const hide=el=>{if(el.dataset.brandHidden)return;el.dataset.brandHidden='1';
+  el.style.setProperty('display','none','important');};
+ function scan(root){
+  let nodes;try{nodes=root.querySelectorAll('*');}catch(e){return;}
+  nodes.forEach(el=>{
+   if(el.shadowRoot)scan(el.shadowRoot);
+   if(el.tagName==='IFRAME'){if(cornerOf(el)||KW.test(el.src||''))hide(el);return;}
+   if(fixedOf(el)&&cornerOf(el)){
+    let t='';try{t=el.innerText||el.textContent||'';}catch(e){}
+    if(KW.test(t))hide(el);
+   }
+  });
+ }
+ let t=0;
+ const iv=setInterval(()=>{scan(document);if(++t>25)clearInterval(iv);},800);
+ new MutationObserver(()=>scan(document))
+  .observe(document.documentElement,{childList:true,subtree:true});
+})();
+</script>
+</body>
+</html>
